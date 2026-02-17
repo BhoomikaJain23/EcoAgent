@@ -28,7 +28,7 @@ function ChatPanel({ analysisData, isOpen, onClose }) {
     setMessages(newMessages);
 
     try {
-      const response = await fetch('http://localhost:8000/api/chat/message', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://ecoagent-clei.onrender.com/api'}/chat/message`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

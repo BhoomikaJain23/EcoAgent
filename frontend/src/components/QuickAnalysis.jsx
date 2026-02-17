@@ -11,7 +11,7 @@ function QuickAnalysis() {
   const loadQuickAnalysis = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8000/api/mock/analysis/current');
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://ecoagent-clei.onrender.com/api'}/mock/analysis/current`);
       const data = await response.json();
       setAnalysis(data);
     } catch (error) {

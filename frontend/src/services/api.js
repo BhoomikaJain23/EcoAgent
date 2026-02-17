@@ -1,7 +1,11 @@
 import axios from 'axios';
 import { generateMockCampusAnalysis, generateMockSimulationTemplates } from './mockData';
 
-const API_BASE_URL = 'http://localhost:8000/api';
+// Use deployed backend on Render, fallback to localhost for development
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://ecoagent-clei.onrender.com/api';
+const BACKEND_HEALTH_URL = import.meta.env.VITE_API_URL 
+  ? import.meta.env.VITE_API_URL.replace('/api', '/health')
+  : 'https://ecoagent-clei.onrender.com/health';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -16,7 +20,7 @@ let backendAvailable = true;
 // Check backend health
 export const checkBackendHealth = async () => {
   try {
-    await axios.get('http://localhost:8000/health', { timeout: 3000 });
+    await axios.get(BACKEND_HEALTH_URL, { timeout: 5000 });
     backendAvailable = true;
     return true;
   } catch (error) {
@@ -140,7 +144,9 @@ export const simulationAPI = {
 };
 
 // Health check
-export const healthCheck = () => axios.get('http://localhost:8000/health');
+// Health check (use environment variable or deployed backend)
+const healthCheckUrl = BACKEND_HEALTH_URL;
+export const healthCheck = () => axios.get(healthCheckUrl);
 
 export const isBackendAvailable = () => backendAvailable;
 

@@ -46,7 +46,12 @@ app = FastAPI(
 # Configure CORS for frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],  # Vite default + alternatives
+    allow_origins=[
+        "http://localhost:5173",  # Local dev (Vite)
+        "http://localhost:3000",  # Local dev alternative
+        "https://ecoagent-clei.onrender.com",  # Deployed backend
+        "*"  # Allow all origins for now (restrict in production)
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
