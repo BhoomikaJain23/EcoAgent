@@ -7,6 +7,7 @@ import Dashboard from './components/Dashboard';
 import Simulation from './components/Simulation';
 import QuickAnalysis from './components/QuickAnalysis';
 import RoomAnalysisPage from './components/RoomAnalysisPage';
+import MobileCameraDetection from './components/MobileCameraDetection';
 import './App.css';
 
 function DashboardLayout() {
@@ -71,6 +72,7 @@ function App() {
               <Route path="/" element={<Landing />} />
               <Route path="/*" element={<DashboardLayout />} />
             </Routes>
+            <MobileCameraDetection />
           </div>
         </Router>
       </AnalysisProvider>

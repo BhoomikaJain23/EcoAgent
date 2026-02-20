@@ -35,6 +35,55 @@ class DataService:
         """Get current room observations."""
         return self.current_observations
     
+    def update_room_occupancy(self, room_id: str, person_count: int) -> Dict[str, Any]:
+        """
+        Update a room's occupancy based on detected person count.
+        
+        Args:
+            room_id: The ID of the room to update
+            person_count: Number of people detected in the room
+        
+        Returns:
+            Updated room observation data
+        """
+        if room_id not in self.campus_data.get("rooms", {}):
+            raise ValueError(f"Room {room_id} not found in campus data")
+        
+        room_config = self.campus_data["rooms"][room_id]
+        capacity = room_config.get("capacity", 30)
+        
+        # Update occupancy in observations
+        occupancy = min(person_count, capacity)
+        occupancy_ratio = occupancy / capacity if capacity > 0 else 0
+        
+        # Determine occupancy level
+        if occupancy_ratio < 0.3:
+            occupancy_level = "low"
+        elif occupancy_ratio < 0.7:
+            occupancy_level = "medium"
+        else:
+            occupancy_level = "high"
+        
+        # Update the observation
+        if "rooms" not in self.current_observations:
+            self.current_observations["rooms"] = {}
+        
+        if room_id not in self.current_observations["rooms"]:
+            self.current_observations["rooms"][room_id] = {}
+        
+        old_occupancy = self.current_observations["rooms"][room_id].get("occupancy", 0)
+        self.current_observations["rooms"][room_id].update({
+            "occupancy": occupancy,
+            "occupancy_level": occupancy_level,
+            "last_detection_time": datetime.now().isoformat(),
+            "detection_method": "yolo_camera",
+            "capacity": capacity
+        })
+        
+        print(f"[DATA_SERVICE] Room {room_id}: {old_occupancy} → {occupancy} people detected")
+        
+        return self.current_observations["rooms"][room_id]
+    
     def apply_environmental_params(self, data: Dict[str, Any], params: Dict[str, Any]) -> Dict[str, Any]:
         """Apply user-specified environmental parameters to room data."""
         modified_data = data.copy()

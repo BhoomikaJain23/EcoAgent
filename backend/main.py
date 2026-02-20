@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 import uvicorn
 
 from agents.campus_graph import CampusAgentGraph
-from api.routes import campus, analysis, simulation, mock_analysis, chat
+from api.routes import campus, analysis, simulation, mock_analysis, chat, detection
 from api.data_service import DataService
 from api import dependencies
 from config import settings
@@ -61,6 +61,7 @@ app.add_middleware(
 app.include_router(campus.router, prefix="/api/campus", tags=["Campus"])
 app.include_router(analysis.router, prefix="/api/analysis", tags=["Analysis"])
 app.include_router(simulation.router, prefix="/api/simulation", tags=["Simulation"])
+app.include_router(detection.router, prefix="/api/detection", tags=["Person Detection"])
 app.include_router(mock_analysis.router, tags=["Mock Demo"])
 app.include_router(chat.router, prefix="/api/chat", tags=["Chat"])
 
