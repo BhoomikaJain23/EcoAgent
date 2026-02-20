@@ -313,7 +313,7 @@ function Dashboard() {
             <span>{elapsedTime}s elapsed</span>
           </div>
           <p className="progress-note">
-            {elapsedTime < 10 && "⏳ Loading Ollama model into memory..."}
+            {elapsedTime < 10 && "⏳ Loading ..."}
             {elapsedTime >= 10 &&
               elapsedTime < 30 &&
               "🧠 Analyzing rooms with AI..."}
